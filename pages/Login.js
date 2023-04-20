@@ -6,14 +6,22 @@ import {
   TouchableOpacity,
   Image,
   StyleSheet,
+  Modal,
 } from 'react-native';
+import {Picker} from '@react-native-picker/picker';
 
 export function Login({navigation}) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState();
 
   const handleLogin = () => {
     // handle login logic here
+  };
+  const handleNeedHelpPress = () => {
+    setOpen(!open);
   };
 
   return (
@@ -51,7 +59,7 @@ export function Login({navigation}) {
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
-            placeholder="Username"
+            placeholder="Email"
             onChangeText={setUsername}
             value={username}
             placeholderTextColor="#888"
@@ -67,7 +75,7 @@ export function Login({navigation}) {
             secureTextEntry
           />
         </View>
-        <View style={styles.needHelp}>
+        <TouchableOpacity style={styles.needHelp} onPress={handleNeedHelpPress}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Text
               style={{
@@ -87,11 +95,143 @@ export function Login({navigation}) {
             source={require('../assets/direction.png')}
             style={styles.directionImage}
           />
-        </View>
+        </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
       </View>
+      <Modal animationType="slide" transparent={true} visible={open}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <Text
+                style={{
+                  fontFamily: 'DMSans-Bold',
+                  color: 'white',
+                  fontSize: 22,
+                }}>
+                Need Help
+              </Text>
+              <TouchableOpacity
+                onPress={handleNeedHelpPress}
+                style={{
+                  paddingVertical: 10,
+                }}>
+                <Image
+                  source={require('../assets/close.png')}
+                  style={styles.helpImage}
+                />
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                borderBottomColor: 'gray',
+                borderBottomWidth: 2,
+                marginTop: 10,
+                width: '70%',
+              }}
+            />
+            <View
+              style={{
+                marginTop: 20,
+              }}>
+              <Text
+                style={{
+                  fontFamily: 'DMSans-Medium',
+                  color: '#cccdd2',
+                  fontSize: 16,
+                  marginVertical: 10,
+                }}>
+                Company Name:
+              </Text>
+
+              <TextInput
+                style={styles.input1}
+                placeholder="Excel Wallpaper"
+                placeholderTextColor="#888"
+              />
+            </View>
+            <View
+              style={{
+                marginTop: 10,
+              }}>
+              <Text
+                style={{
+                  fontFamily: 'DMSans-Medium',
+                  color: '#cccdd2',
+                  fontSize: 16,
+                  marginVertical: 10,
+                }}>
+                Email ID:
+              </Text>
+
+              <TextInput
+                style={styles.input1}
+                placeholder="Email"
+                placeholderTextColor="#888"
+              />
+            </View>
+            <View
+              style={{
+                marginTop: 10,
+              }}>
+              <Text
+                style={{
+                  fontFamily: 'DMSans-Medium',
+                  color: '#cccdd2',
+                  fontSize: 16,
+                  marginVertical: 8,
+                }}>
+                Issues Encountered:
+              </Text>
+
+              <View style={styles.input1}>
+                <Picker
+                  selectedValue={selectedLanguage}
+                  onValueChange={(itemValue, itemIndex) =>
+                    setSelectedLanguage(itemValue)
+                  }>
+                  <Picker.Item
+                    label="Password not Working"
+                    value="Password not Working"
+                    color="white"
+                  />
+                  <Picker.Item
+                    label="Forgot Password"
+                    value="Forgot Password"
+                    color="white"
+                  />
+                </Picker>
+              </View>
+              <TouchableOpacity style={styles.submit}>
+                <Text style={styles.submitText}>Submit</Text>
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                borderBottomColor: 'white',
+                borderBottomWidth: 2,
+                marginTop: 50,
+              }}
+            />
+            <Text
+              style={{
+                fontFamily: 'DMSans-Medium',
+                color: 'white',
+                fontSize: 14,
+                marginVertical: 10,
+                textAlign: 'center',
+              }}>
+              We will return back to you in 7 days.
+            </Text>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -139,7 +279,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain', // resize the image to fit inside its container
   },
   inputContainer: {
-    marginTop: 20,
+    marginTop: 30,
     backgroundColor: '#181e30',
   },
   input: {
@@ -148,11 +288,17 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: 'DMSans-Medium',
   },
+  input1: {
+    borderRadius: 5,
+    fontSize: 14,
+    fontFamily: 'DMSans-Medium',
+    backgroundColor: '#181e30',
+  },
   needHelp: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: 20,
   },
   button: {
     backgroundColor: '#fcef00',
@@ -161,10 +307,46 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 20,
   },
+  submit: {
+    backgroundColor: '#fcef00',
+    padding: 10,
+    borderRadius: 50,
+    alignItems: 'center',
+
+    marginTop: 20,
+  },
   buttonText: {
     color: 'black',
     fontSize: 22,
     padding: 6,
     fontFamily: 'DMSans-Bold',
+  },
+  submitText: {
+    color: 'black',
+    fontSize: 20,
+    padding: 3,
+    fontFamily: 'DMSans-Bold',
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: '#01091e',
+    borderRadius: 20,
+    width: '90%',
+    padding: 35,
+    // For iOS
+    shadowColor: '#cffee6',
+    shadowOffset: {width: -2, height: -2},
+    shadowOpacity: 0.18,
+    shadowRadius: 115,
+
+    // For Android
+    elevation: 5,
+    flexDirection: 'column',
+    flex: 0.7,
   },
 });
