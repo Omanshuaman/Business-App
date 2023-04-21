@@ -10,6 +10,8 @@ import {
 } from 'react-native';
 import {Login} from '../pages/Login';
 import {DetailsScreen} from '../pages/DetailsScreen';
+import {ProductList} from '../pages/ProductList';
+
 import {AuthContext} from '../context/AuthContext';
 const AppStack = createNativeStackNavigator();
 const AuthStack = createNativeStackNavigator();
@@ -20,6 +22,19 @@ function AppStackScreens() {
       <AppStack.Screen
         name="Details"
         component={DetailsScreen}
+        options={({navigation}) => ({
+          headerStyle: {
+            backgroundColor: '#01091e',
+          },
+          headerTintColor: '#01091e',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        })}
+      />
+      <AppStack.Screen
+        name="ProductList"
+        component={ProductList}
         options={({navigation}) => ({
           headerStyle: {
             backgroundColor: '#01091e',

@@ -10,6 +10,9 @@ import {
   ScrollView,
   KeyboardAvoidingView,
 } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
+import {getUniqueId, getManufacturer} from 'react-native-device-info';
+
 import {Picker} from '@react-native-picker/picker';
 import {BlurView} from '@react-native-community/blur';
 import {AuthContext} from '../context/AuthContext';
@@ -21,7 +24,11 @@ export function Login({navigation}) {
   const [modalVisible, setModalVisible] = useState(false);
   const [open, setOpen] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState();
-
+  const deviceId = DeviceInfo.getUniqueId();
+  console.log('Device ID:', deviceId);
+  DeviceInfo.getDevice().then(device => {
+    console.log(device);
+  });
   const handleLogin = () => {
     // handle login logic here
     console.log(test);
@@ -107,7 +114,7 @@ export function Login({navigation}) {
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            login(userId, password, '6e998dae37994c1e8a9f0f27712316b2a');
+            login(userId, password, '6e998dae37994c1e8a9f0f27712316b2');
           }}>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
@@ -320,7 +327,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
-    marginTop: 20,
+    marginVertical: 18,
   },
   button: {
     backgroundColor: '#fcef00',
