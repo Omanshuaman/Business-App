@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   View,
   Text,
@@ -7,11 +7,16 @@ import {
   Image,
   StyleSheet,
   Modal,
+  ScrollView,
+  KeyboardAvoidingView,
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
+import {BlurView} from '@react-native-community/blur';
+import {AuthContext} from '../context/AuthContext';
 
 export function Login({navigation}) {
-  const [username, setUsername] = useState('');
+  const {login} = useContext(AuthContext);
+  const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [open, setOpen] = useState(false);
@@ -19,6 +24,7 @@ export function Login({navigation}) {
 
   const handleLogin = () => {
     // handle login logic here
+    console.log(test);
   };
   const handleNeedHelpPress = () => {
     setOpen(!open);
@@ -55,26 +61,28 @@ export function Login({navigation}) {
             Welcome to Partner Account
           </Text>
         </View>
+        <KeyboardAvoidingView behavior="padding">
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="User ID"
+              onChangeText={setUserId}
+              value={userId}
+              placeholderTextColor="#888"
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              onChangeText={setPassword}
+              value={password}
+              placeholderTextColor="#888"
+              secureTextEntry
+            />
+          </View>
+        </KeyboardAvoidingView>
 
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            onChangeText={setUsername}
-            value={username}
-            placeholderTextColor="#888"
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            onChangeText={setPassword}
-            value={password}
-            placeholderTextColor="#888"
-            secureTextEntry
-          />
-        </View>
         <TouchableOpacity style={styles.needHelp} onPress={handleNeedHelpPress}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Text
@@ -96,141 +104,154 @@ export function Login({navigation}) {
             style={styles.directionImage}
           />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            login(userId, password, '6e998dae37994c1e8a9f0f27712316b2a');
+          }}>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
       </View>
+
       <Modal animationType="slide" transparent={true} visible={open}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
-              <Text
+        <BlurView
+          style={styles.absolute}
+          blurType="light"
+          blurAmount={1000}
+          reducedTransparencyFallbackColor="white"
+        />
+        <ScrollView>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <View
                 style={{
-                  fontFamily: 'DMSans-Bold',
-                  color: 'white',
-                  fontSize: 22,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
                 }}>
-                Need Help
-              </Text>
-              <TouchableOpacity
-                onPress={handleNeedHelpPress}
-                style={{
-                  paddingVertical: 10,
-                }}>
-                <Image
-                  source={require('../assets/close.png')}
-                  style={styles.helpImage}
-                />
-              </TouchableOpacity>
-            </View>
-            <View
-              style={{
-                borderBottomColor: 'gray',
-                borderBottomWidth: 2,
-                marginTop: 10,
-                width: '70%',
-              }}
-            />
-            <View
-              style={{
-                marginTop: 20,
-              }}>
-              <Text
-                style={{
-                  fontFamily: 'DMSans-Medium',
-                  color: '#cccdd2',
-                  fontSize: 16,
-                  marginVertical: 10,
-                }}>
-                Company Name:
-              </Text>
-
-              <TextInput
-                style={styles.input1}
-                placeholder="Excel Wallpaper"
-                placeholderTextColor="#888"
-              />
-            </View>
-            <View
-              style={{
-                marginTop: 10,
-              }}>
-              <Text
-                style={{
-                  fontFamily: 'DMSans-Medium',
-                  color: '#cccdd2',
-                  fontSize: 16,
-                  marginVertical: 10,
-                }}>
-                Email ID:
-              </Text>
-
-              <TextInput
-                style={styles.input1}
-                placeholder="Email"
-                placeholderTextColor="#888"
-              />
-            </View>
-            <View
-              style={{
-                marginTop: 10,
-              }}>
-              <Text
-                style={{
-                  fontFamily: 'DMSans-Medium',
-                  color: '#cccdd2',
-                  fontSize: 16,
-                  marginVertical: 8,
-                }}>
-                Issues Encountered:
-              </Text>
-
-              <View style={styles.input1}>
-                <Picker
-                  selectedValue={selectedLanguage}
-                  onValueChange={(itemValue, itemIndex) =>
-                    setSelectedLanguage(itemValue)
-                  }>
-                  <Picker.Item
-                    label="Password not Working"
-                    value="Password not Working"
-                    color="white"
+                <Text
+                  style={{
+                    fontFamily: 'DMSans-Bold',
+                    color: 'white',
+                    fontSize: 22,
+                  }}>
+                  Need Help
+                </Text>
+                <TouchableOpacity
+                  onPress={handleNeedHelpPress}
+                  style={{
+                    paddingVertical: 10,
+                  }}>
+                  <Image
+                    source={require('../assets/close.png')}
+                    style={styles.helpImage}
                   />
-                  <Picker.Item
-                    label="Forgot Password"
-                    value="Forgot Password"
-                    color="white"
-                  />
-                </Picker>
+                </TouchableOpacity>
               </View>
-              <TouchableOpacity style={styles.submit}>
-                <Text style={styles.submitText}>Submit</Text>
-              </TouchableOpacity>
+              <View
+                style={{
+                  borderBottomColor: 'gray',
+                  borderBottomWidth: 2,
+                  marginTop: 10,
+                  width: '70%',
+                }}
+              />
+              <View
+                style={{
+                  marginTop: 20,
+                }}>
+                <Text
+                  style={{
+                    fontFamily: 'DMSans-Medium',
+                    color: '#cccdd2',
+                    fontSize: 16,
+                    marginVertical: 10,
+                  }}>
+                  Company Name:
+                </Text>
+
+                <TextInput
+                  style={styles.input1}
+                  placeholder="Excel Wallpaper"
+                  placeholderTextColor="#888"
+                />
+              </View>
+              <View
+                style={{
+                  marginTop: 10,
+                }}>
+                <Text
+                  style={{
+                    fontFamily: 'DMSans-Medium',
+                    color: '#cccdd2',
+                    fontSize: 16,
+                    marginVertical: 10,
+                  }}>
+                  Email ID:
+                </Text>
+
+                <TextInput
+                  style={styles.input1}
+                  placeholder="Email"
+                  placeholderTextColor="#888"
+                />
+              </View>
+              <View
+                style={{
+                  marginTop: 10,
+                }}>
+                <Text
+                  style={{
+                    fontFamily: 'DMSans-Medium',
+                    color: '#cccdd2',
+                    fontSize: 16,
+                    marginVertical: 8,
+                  }}>
+                  Issues Encountered:
+                </Text>
+
+                <View style={styles.input1}>
+                  <Picker
+                    selectedValue={selectedLanguage}
+                    onValueChange={(itemValue, itemIndex) =>
+                      setSelectedLanguage(itemValue)
+                    }>
+                    <Picker.Item
+                      label="Password not Working"
+                      value="Password not Working"
+                      color="white"
+                    />
+                    <Picker.Item
+                      label="Forgot Password"
+                      value="Forgot Password"
+                      color="white"
+                    />
+                  </Picker>
+                </View>
+                <TouchableOpacity style={styles.submit}>
+                  <Text style={styles.submitText}>Submit</Text>
+                </TouchableOpacity>
+              </View>
+              <View
+                style={{
+                  borderBottomColor: 'white',
+                  borderBottomWidth: 2,
+                  marginTop: 50,
+                }}
+              />
+              <Text
+                style={{
+                  fontFamily: 'DMSans-Medium',
+                  color: 'white',
+                  fontSize: 14,
+                  marginVertical: 10,
+                  textAlign: 'center',
+                }}>
+                We will return back to you in 7 days.
+              </Text>
             </View>
-            <View
-              style={{
-                borderBottomColor: 'white',
-                borderBottomWidth: 2,
-                marginTop: 50,
-              }}
-            />
-            <Text
-              style={{
-                fontFamily: 'DMSans-Medium',
-                color: 'white',
-                fontSize: 14,
-                marginVertical: 10,
-                textAlign: 'center',
-              }}>
-              We will return back to you in 7 days.
-            </Text>
           </View>
-        </View>
+        </ScrollView>
       </Modal>
     </View>
   );
@@ -242,9 +263,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#01091e',
   },
+
   logoImage: {
     width: 250,
-    height: 250,
+    height: 220,
     alignSelf: 'center',
     borderRadius: 20,
   },
@@ -348,5 +370,12 @@ const styles = StyleSheet.create({
     elevation: 5,
     flexDirection: 'column',
     flex: 0.7,
+  },
+  absolute: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
   },
 });
